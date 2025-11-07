@@ -1,4 +1,4 @@
-import { Action, createReducer, on } from "@ngrx/store";
+import { Action, createFeature, createFeatureSelector, createReducer, createSelector, on } from "@ngrx/store";
 import { UsuarioModel } from "src/app/models/UsuarioModel";
 import * as fromUsuariosAction from "./usuarios.actions";
 
@@ -49,3 +49,25 @@ const _usuariosReducer = createReducer(
 export function usuariosReducer(state = initialUsuariosState, action: Action) {
     return _usuariosReducer(state, action);
 }
+
+
+//Seleciona o estado inteiro do estado de usuarios na Store
+const getUsuariosFeatureState = createFeatureSelector<UsuariosState>('usuarios');
+
+//Seleciona só a lista de usuarios do estado
+export const getUsuarios = createSelector(
+    getUsuariosFeatureState,
+    (state) => state.usuarios
+);
+
+//Seleciona o usuario atualmente selecionado
+export const getUsuario = createSelector(
+    getUsuariosFeatureState,
+    (state) => state.usuario
+);
+
+//Seleciona a string de erro do estado
+export const getUsuariosError = createSelector(
+    getUsuariosFeatureState,
+    (state) => state.error
+);
