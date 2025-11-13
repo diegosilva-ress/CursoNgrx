@@ -16,7 +16,7 @@ export class UsuarioService {
     return this.http.get<UsuarioModel>(`http://localhost:3000/Usuarios/${id}`);
   }
 
-  addUsuario(usuario: UsuarioModel) {
+  addUsuario(usuario: Omit<UsuarioModel, 'id'>) {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json; charset=utf-8');
 

@@ -15,7 +15,7 @@
       <td>{{ usuario.idade }}</td>
       <td>{{ usuario.perfil }}</td>
       <td>
-        <button class="btn btn-primary">Editar</button>
+        <button class="btn btn-primary" (click)="editar(usuario.id)">Editar</button>
       </td>
     </tr>
   </tbody>

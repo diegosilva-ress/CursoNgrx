@@ -19,4 +19,8 @@ export class ListarUsuariosComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(fromUsuarioActions.LoadUsuarios());
   }
+
+  editar(userId: number): void {
+    this.store.dispatch(fromUsuarioActions.LoadUsuarioById({ id: userId }));
+  }
 }

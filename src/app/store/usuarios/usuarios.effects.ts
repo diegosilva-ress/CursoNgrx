@@ -13,7 +13,7 @@ export class UsuariosEffects {
 
   loadUsuarios$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromUsuariosAction.UsuariosActionTypes.LOAD_USUARIOS),
+      ofType(fromUsuariosAction.LoadUsuarios),
       mergeMap(() =>
         this.usuarioService.getUsuarios().pipe(
           map((usuarios) => ({
@@ -34,9 +34,9 @@ export class UsuariosEffects {
 
   loadUsuario$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromUsuariosAction.UsuariosActionTypes.LOAD_USUARIO_BY_ID),
+      ofType(fromUsuariosAction.LoadUsuarioById),
       mergeMap((action: any) =>
-        this.usuarioService.getUsuarioById(action.payload).pipe(
+        this.usuarioService.getUsuarioById(action.id).pipe(
           map((usuario) => ({
             type: fromUsuariosAction.UsuariosActionTypes
               .LOAD_USUARIO_BY_ID_SUCCESS,
@@ -56,28 +56,27 @@ export class UsuariosEffects {
 
   createUsuario$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromUsuariosAction.UsuariosActionTypes.CREATE_USUARIO),
-      mergeMap((action: any) =>
-        this.usuarioService.addUsuario(action.payload).pipe(
-          map((usuario) => ({
-            type: fromUsuariosAction.UsuariosActionTypes.CREATE_USUARIO_SUCCESS,
-            payload: usuario,
-          })),
+      ofType(fromUsuariosAction.CreateUsuario),
+      mergeMap((action) => {
+        // Remove o id antes de enviar para o json-server
+        const { id, ...usuarioSemId } = action.usuario;
+        return this.usuarioService.addUsuario(usuarioSemId).pipe(
+          map((usuario) =>
+            fromUsuariosAction.CreateUsuarioSuccess({ payload: usuario })
+          ),
           catchError((error) =>
-            of({
-              type: fromUsuariosAction.UsuariosActionTypes
-                .CREATE_USUARIO_FAILURE,
-              error: error.message,
-            })
+            of(
+              fromUsuariosAction.CreateUsuarioFailure({ error: error.message })
+            )
           )
-        )
-      )
+        );
+      })
     )
   );
 
   updateUsuario$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromUsuariosAction.UsuariosActionTypes.UPDATE_USUARIO),
+      ofType(fromUsuariosAction.UpdateUsuario),
       mergeMap((action: any) =>
         this.usuarioService.updateUsuario(action.payload).pipe(
           map((usuario) => ({
@@ -98,7 +97,7 @@ export class UsuariosEffects {
 
   deleteUsuario$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromUsuariosAction.UsuariosActionTypes.DELETE_USUARIO),
+      ofType(fromUsuariosAction.DeleteUsuario),
       mergeMap((action: any) =>
         this.usuarioService.deleteUsuario(action.payload).pipe(
           map((usuario) => ({
