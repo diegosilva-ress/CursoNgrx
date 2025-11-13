@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from '../services/UsuarioService';
 import { UsuarioModel } from '../models/UsuarioModel';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/app-state';
+import * as fromUsuarioActions from '../store/usuarios/usuarios.actions'; 
+import * as fromUsuarioSelector from '../store/usuarios/usuarios.reducer'; 
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-listar-usuarios',
@@ -8,13 +12,11 @@ import { UsuarioModel } from '../models/UsuarioModel';
   styleUrls: ['./listar-usuarios.component.scss'],
 })
 export class ListarUsuariosComponent implements OnInit {
-  listaUsuarios: UsuarioModel[] = [];
+  listaUsuarios$: Observable<UsuarioModel[]> = this.store.select(fromUsuarioSelector.getUsuarios);
 
-  constructor(private usuarioService: UsuarioService) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.usuarioService.getUsuarios().subscribe((usuarios: UsuarioModel[]) => {
-      this.listaUsuarios = usuarios;
-    });
+    this.store.dispatch(fromUsuarioActions.LoadUsuarios());
   }
 }
