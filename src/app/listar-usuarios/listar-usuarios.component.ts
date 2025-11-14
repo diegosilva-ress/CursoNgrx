@@ -40,4 +40,8 @@ export class ListarUsuariosComponent implements OnInit {
     if (!this.selectedUsuario) return;
     this.store.dispatch(fromUsuarioActions.UpdateUsuario({ usuario: this.selectedUsuario }));
   }
+
+  excluir(userId: number): void {
+    this.store.dispatch(fromUsuarioActions.DeleteUsuario({ id: userId }));
+  }
 }

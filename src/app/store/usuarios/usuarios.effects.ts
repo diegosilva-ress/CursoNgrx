@@ -92,24 +92,21 @@ export class UsuariosEffects {
     )
   );
 
-  deleteUsuario$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(fromUsuariosAction.DeleteUsuario),
-      mergeMap((action: any) =>
-        this.usuarioService.deleteUsuario(action.payload).pipe(
-          map((usuario) => ({
-            type: fromUsuariosAction.UsuariosActionTypes.DELETE_USUARIO_SUCCESS,
-            payload: usuario,
-          })),
-          catchError((error) =>
-            of({
-              type: fromUsuariosAction.UsuariosActionTypes
-                .DELETE_USUARIO_FAILURE,
-              error: error.message,
-            })
+deleteUsuario$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(fromUsuariosAction.DeleteUsuario),
+    mergeMap((action) =>
+      this.usuarioService.deleteUsuario(action.id).pipe(
+        map(() =>
+          fromUsuariosAction.DeleteUsuarioSuccess({ payload: action.id })
+        ),
+        catchError((error) =>
+          of(
+            fromUsuariosAction.DeleteUsuarioFailure({ error: error.message })
           )
         )
       )
     )
-  );
+  )
+);
 }
