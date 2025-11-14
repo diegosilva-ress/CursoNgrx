@@ -15,8 +15,102 @@
       <td>{{ usuario.idade }}</td>
       <td>{{ usuario.perfil }}</td>
       <td>
-        <button class="btn btn-primary" (click)="editar(usuario.id)">Editar</button>
+        <button
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          type="button"
+          (click)="buscar(usuario.id)"
+        >
+          Editar
+        </button>
       </td>
     </tr>
   </tbody>
 </table>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="modal-body" *ngIf="selectedUsuario as usuario">
+          <form id="myForm" #f="ngForm" class="row g-3">
+            <div class="col-6">
+              <label>ID</label>
+              <input
+                id="id"
+                name="id"
+                [(ngModel)]="usuario.id"
+                class="form-control"
+                type="text"
+                disabled="true"
+              />
+            </div>
+            <div class="col-6">
+              <label>Nome</label>
+              <input
+                id="nome"
+                name="nome"
+                [(ngModel)]="usuario.nome"
+                class="form-control"
+                type="text"
+              />
+            </div>
+            <div class="col-6">
+              <label>Idade</label>
+              <input
+                id="idade"
+                name="idade"
+                [(ngModel)]="usuario.idade"
+                class="form-control"
+                type="text"
+              />
+            </div>
+            <div class="col-6">
+              <label>Perfil</label>
+              <input
+                id="perfil"
+                name="perfil"
+                [(ngModel)]="usuario.perfil"
+                class="form-control"
+                type="text"
+              />
+            </div>
+          </form>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Fechar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="editar()"
+            >
+              Salvar
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>

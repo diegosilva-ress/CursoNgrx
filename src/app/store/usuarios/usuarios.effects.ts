@@ -77,18 +77,15 @@ export class UsuariosEffects {
   updateUsuario$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromUsuariosAction.UpdateUsuario),
-      mergeMap((action: any) =>
-        this.usuarioService.updateUsuario(action.payload).pipe(
-          map((usuario) => ({
-            type: fromUsuariosAction.UsuariosActionTypes.UPDATE_USUARIO_SUCCESS,
-            payload: usuario,
-          })),
+      mergeMap((action) =>
+        this.usuarioService.updateUsuario(action.usuario).pipe(
+          map((usuario) =>
+            fromUsuariosAction.UpdateUsuarioSuccess({ payload: usuario })
+          ),
           catchError((error) =>
-            of({
-              type: fromUsuariosAction.UsuariosActionTypes
-                .UPDATE_USUARIO_FAILURE,
-              error: error.message,
-            })
+            of(
+              fromUsuariosAction.UpdateUsuarioFailure({ error: error.message })
+            )
           )
         )
       )
